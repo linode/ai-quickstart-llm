@@ -7,8 +7,8 @@ Automated deployment script for running a AI inference stack on Akamai Cloud (Li
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd ai-llm-basic
+git clone https://github.com/linode/ai-quickstart-simplechat
+cd ai-quickstart-simplechat
 
 # Run the deployment script
 ./start.sh
