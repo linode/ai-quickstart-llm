@@ -11,7 +11,7 @@ git clone https://github.com/linode/ai-quickstart-llm
 cd ai-quickstart-llm
 
 # Run the deployment script
-./start.sh
+./deploy.sh
 ```
 
 The script will guide you through:
@@ -77,9 +77,9 @@ The script will guide you through:
 -----------------------------------------
 ## 🚦 Getting Started
 
-### 1. Just run start script with your terminal
+### 1. Just run deploy script with your terminal
 ```bash
-./start.sh
+./deploy.sh
 ```
 
 ### 2. Follow Interactive Prompts
@@ -118,7 +118,7 @@ Once complete, you'll see:
 
 ```
 ai-quickstart-llm/
-├── start.sh                     # Main deployment script
+├── deploy.sh                    # Main deployment script
 ├── script/
 │   ├── check_linodecli_token.sh # Token extraction from linode-cli
 │   ├── linode_oauth.sh          # OAuth flow for token generation
