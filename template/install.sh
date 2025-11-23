@@ -44,17 +44,17 @@ nvidia-ctk runtime configure --runtime=docker
 # Restart Docker to apply NVIDIA runtime configuration
 systemctl restart docker
 
-# Create systemd service for AI LLM Basic Stack
-notify "⚙️ Registering systemd service for AI LLM Basic Stack..."
-cat > /etc/systemd/system/ai-llm-basic.service << "EOF"
+# Create systemd service for AI Quickstart SimpleChat Stack
+notify "⚙️ Registering systemd service for AI Quickstart SimpleChat Stack..."
+cat > /etc/systemd/system/ai-quickstart-simplechat.service << "EOF"
 [Unit]
-Description=Start AI LLM Basic Stack
+Description=Start AI Quickstart SimpleChat Stack
 After=docker.service
 Requires=docker.service
 
 [Service]
 Type=oneshot
-WorkingDirectory=/opt/ai-llm-basic
+WorkingDirectory=/opt/ai-quickstart-simplechat
 ExecStart=/usr/bin/docker compose --progress quiet up -d
 ExecStop=/usr/bin/docker compose down
 RemainAfterExit=yes
@@ -65,11 +65,11 @@ EOF
 
 # Enable service (will start containers on boot)
 systemctl daemon-reload
-systemctl enable ai-llm-basic.service
+systemctl enable ai-quickstart-simplechat.service
 
 # Pull latest Docker images
 notify "⬇️ Pulling latest vLLM & OpenWebUI container images... (this may take 2 - 3 min)..."
-cd /opt/ai-llm-basic
+cd /opt/ai-quickstart-simplechat
 docker compose pull --quiet || true
 
 # Check if NVIDIA modules exist for current kernel
@@ -84,8 +84,8 @@ if [ -f "/lib/modules/${CURRENT_KERNEL}/kernel/nvidia-580-open/nvidia.ko" ] || \
 
     # Verify driver is loaded
     if nvidia-smi > /dev/null 2>&1; then
-        # Start AI LLM Basic Stack
-        cd /opt/ai-llm-basic
+        # Start AI Quickstart SimpleChat Stack
+        cd /opt/ai-quickstart-simplechat
         notify "🚀 Starting vLLM & OpenWebUI with docker comopose up ..."
         docker compose up -d
         exit 0

@@ -132,7 +132,7 @@ show_banner() {
 show_banner
 
 print_msg "$CYAN" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-print_msg "$BOLD" "                    LLM Basic Quick Start"
+print_msg "$BOLD" "                    AI Quickstart SimpleChat"
 print_msg "$CYAN" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 print_msg "$YELLOW" "This script will:"
@@ -296,7 +296,7 @@ validate_label() {
     return 0
 }
 
-DEFAULT_LABEL="ai-llm-basic-$(date +%y%m%d%H%M)"
+DEFAULT_LABEL="ai-quickstart-simplechat-$(date +%y%m%d%H%M)"
 while true; do
     printf '\n\n\n\n\n\033[5A'        # Print 5 blank lines to scroll up
     read -p "$(echo -e ${YELLOW}Enter instance label [default: $DEFAULT_LABEL]:${NC} )" user_label
@@ -727,11 +727,11 @@ echo "   2. Create admin user account (your account data is stored only on your 
 echo "   3. Start chatting with the model running on your GPU instance !!"
 echo ""
 print_msg "$YELLOW" "📁 Check AI Stack Configuration:"
-printf "   Docker Compose: ${CYAN}/opt/ai-llm-basic/docker-compose.yml${NC}\n"
+printf "   Docker Compose: ${CYAN}/opt/ai-quickstart-simplechat/docker-compose.yml${NC}\n"
 echo "   Services: vLLM (port 8000) + OpenWebUI (port 3000)"
 echo ""
 echo ""
-echo "🚀 Enjoy your AI LLM Basic Stack on Akamai Cloud !!"
+echo "🚀 Enjoy your AI Quickstart SimpleChat on Akamai Cloud !!"
 echo ""
 echo ""
 log_to_file "INFO" "Deployment completed successfully"

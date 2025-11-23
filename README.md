@@ -55,13 +55,13 @@ The script will guide you through:
 ### Configuration files in GPU Instance
 ```
    # Install script called by cloud-init service
-   /opt/ai-llm-basic/install.sh
+   /opt/ai-quickstart-simplechat/install.sh
 
    # docker compose file calle by systemctl at startup
-   /opt/ai-llm-basic/docker-compose.yml
-   
+   /opt/ai-quickstart-simplechat/docker-compose.yml
+
    # service definition
-   /etc/systemd/system/ai-llm-basic.service
+   /etc/systemd/system/ai-quickstart-simplechat.service
 ```
 
 -----------------------------------------
@@ -117,7 +117,7 @@ Once complete, you'll see:
 ## 📁 Project Structure
 
 ```
-ai-llm-basic/
+ai-quickstart-simplechat/
 ├── start.sh                     # Main deployment script
 ├── script/
 │   ├── check_linodecli_token.sh # Token extraction from linode-cli
@@ -156,10 +156,10 @@ ssh root@<instance-ip>
 docker ps
 
 # Check Docker containers log
-cd /opt/ai-llm-basic && docker compose logs
+cd /opt/ai-quickstart-simplechat && docker compose logs
 
 # Check systemd service
-journalctl -u ai-llm-basic.service -n 10000 | awk '!seen[$0]++'
+journalctl -u ai-quickstart-simplechat.service -n 10000 | awk '!seen[$0]++'
 
 # Check cloud-init logs
 tail -f /var/log/cloud-init-output.log -n 1000
@@ -169,10 +169,10 @@ tail -f /var/log/cloud-init-output.log -n 1000
 ### Restart Services
 ```bash
 # Restart all services
-systemctl restart ai-llm-basic.service
+systemctl restart ai-quickstart-simplechat.service
 
 # Or using Docker Compose
-cd /opt/ai-llm-basic
+cd /opt/ai-quickstart-simplechat
 docker compose restart
 ```
 
@@ -205,10 +205,10 @@ nvidia-smi
 docker ps -a
 
 # Check systemd service
-systemctl status ai-llm-basic.service
+systemctl status ai-quickstart-simplechat.service
 
 # View detailed logs
-journalctl -u ai-llm-basic.service -xe
+journalctl -u ai-quickstart-simplechat.service -xe
 ```
 
 ### vLLM Model Not Loading
