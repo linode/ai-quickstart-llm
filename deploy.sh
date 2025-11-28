@@ -17,7 +17,6 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}" 2>/dev/null)" 2>/dev/null && pwd 2>/dev/null || echo "")"
 
 # Remote repository base URL (for downloading files when running remotely)
-# TODO: Remove token parameters once repository is public
 REPO_RAW_BASE="https://raw.githubusercontent.com/linode/ai-quickstart-llm/main"
 
 # Temp directory for remote execution (will be cleaned up on exit)
@@ -30,8 +29,8 @@ _setup_required_files() {
     local files=("script/quickstart_tools.sh" "template/cloud-init.yaml" "template/docker-compose.yml" "template/install.sh")
     local all_exist=true
 
-    # Check if all required files exist locally (also detect /dev/fd from process substitution)
-    [[ -z "$SCRIPT_DIR" || "$SCRIPT_DIR" == /dev/* ]] && all_exist=false
+    # Check if all required files exist locally
+    [ -z "$SCRIPT_DIR" ] && all_exist=false
     for f in "${files[@]}"; do [ ! -f "${SCRIPT_DIR}/$f" ] && all_exist=false; done
 
     if [ "$all_exist" = true ]; then
