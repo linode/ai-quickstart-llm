@@ -125,13 +125,13 @@ Once complete, you'll see:
 ```
 ai-quickstart-llm/
 ├── deploy.sh                    # Main deployment script
+├── delete.sh                    # Instance deletion script
 ├── script/
-│   ├── check_linodecli_token.sh # Token extraction from linode-cli
-│   ├── linode_oauth.sh          # OAuth flow for token generation
-│   └── logo/                    # Akamai logo ASCII art
+│   └── quickstart_tools.sh      # Shared functions (API, OAuth, utilities)
 └── template/
-    ├── compose.yml              # Docker Compose configuration
-    └── install.sh               # Cloud-init installation script
+    ├── cloud-init.yaml          # Cloud-init configuration
+    ├── docker-compose.yml       # Docker Compose configuration
+    └── install.sh               # Post-boot installation script
 ```
 
 -----------------------------------------
