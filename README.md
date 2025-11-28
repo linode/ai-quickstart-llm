@@ -5,22 +5,13 @@ Automated deployment script for running a AI inference stack on Akamai Cloud (Li
 -----------------------------------------
 ## 🚀 Quick Start
 
-```bash
-# Clone the repository
-git clone https://github.com/linode/ai-quickstart-llm
-cd ai-quickstart-llm
+Run this single command to deploy your AI stack:
 
-# Run the deployment script
-./deploy.sh
+```bash
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main/deploy.sh | bash
 ```
 
-The script will guide you through:
-1. API authentication (linode-cli or OAuth)
-2. Region selection
-3. GPU instance type selection
-4. Instance labeling
-5. SSH key configuration
-6. Automated deployment and health checks
+That's it! The script will download required files and guide you through the interactive deployment process.
 
 ## ✨ Features
 - Fully Automated Deployment handles instance creation to service verification with real-time progress tracking
@@ -37,8 +28,7 @@ The script will guide you through:
 
 ### Linode GPU Instance with
 - Ubuntu 24.04 LTS with NVIDIA drivers
-- Docker & Docker Compose
-- NVIDIA Container Toolkit
+- Docker & NVIDIA Container Toolkit
 - Systemd service for automatic startup on reboot
 
 ### Docker container
@@ -77,12 +67,28 @@ The script will guide you through:
 -----------------------------------------
 ## 🚦 Getting Started
 
-### 1. Just run deploy script with your terminal
+### Option A: Remote Execution (Recommended)
+
+No installation required - just run:
+
 ```bash
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main/deploy.sh | bash
+```
+
+### Option B: Clone Repository
+
+If you prefer to inspect or customize the scripts:
+
+```bash
+# Clone the repository
+git clone https://github.com/linode/ai-quickstart-llm
+cd ai-quickstart-llm
+
+# Run the deployment script
 ./deploy.sh
 ```
 
-### 2. Follow Interactive Prompts
+### Follow Interactive Prompts
 The script will ask you to:
 - Choose a region (e.g., us-east, eu-west)
 - Select GPU instance type

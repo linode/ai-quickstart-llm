@@ -455,7 +455,7 @@ while true; do
     progress "$YELLOW" "Status:booting ... Elapsed: ${ELAPSED_STR}"
 
     [ $ELAPSED -ge 120 ] && _error_exit_with_cleanup "Instance failed to become accessible" true
-    ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" exit 2>/dev/null && break
+    ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" exit </dev/null 2>/dev/null && break
     sleep 2
 done
 log_to_file "INFO" "Instance rebooted and SSH accessible in ${ELAPSED_STR}s"
@@ -469,7 +469,7 @@ echo ""
 print_msg "$YELLOW" "Waiting for containers to start..."
 scroll_up 8
 
-CONTAINER_CHECK=$(ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "docker ps --format '{{.Names}}' 2>/dev/null" || echo "")
+CONTAINER_CHECK=$(ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "docker ps --format '{{.Names}}'" </dev/null 2>/dev/null || echo "")
 
 if echo "$CONTAINER_CHECK" | grep -q "vllm" && echo "$CONTAINER_CHECK" | grep -q "open-webui"; then
     log_to_file "INFO" "Docker containers verified: vLLM and Open-WebUI running"
@@ -489,7 +489,7 @@ while true; do
     ELAPSED_STR=$([ $ELAPSED -ge 60 ] && echo "$((ELAPSED / 60))m $((ELAPSED % 60))s" || echo "${ELAPSED}s")
     progress "$YELLOW" "Status:starting ... Elapsed: ${ELAPSED_STR}"
 
-    if [ "$(ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/health 2>/dev/null" || echo "000")" = "200" ]; then
+    if [ "$(ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/health" </dev/null 2>/dev/null || echo "000")" = "200" ]; then
         log_to_file "INFO" "Open-WebUI health check passed in ${ELAPSED}s"
         progress "$NC" "Open-WebUI is ready (took ${ELAPSED_STR})"
         break
@@ -513,7 +513,7 @@ while true; do
     ELAPSED_STR=$([ $ELAPSED -ge 60 ] && echo "$((ELAPSED / 60))m $((ELAPSED % 60))s" || echo "${ELAPSED}s")
     progress "$YELLOW" "Status:downloading model ... Elapsed: ${ELAPSED_STR}"
 
-    if ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "curl -s http://localhost:8000/v1/models 2>/dev/null" | grep -q '"id":"openai/gpt-oss-20b"'; then
+    if ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "curl -s http://localhost:8000/v1/models" </dev/null 2>/dev/null | grep -q '"id":"openai/gpt-oss-20b"'; then
         log_to_file "INFO" "vLLM model loaded successfully in ${ELAPSED_STR}"
         progress "$NC" "vLLM model is loaded (took ${ELAPSED_STR})"
         break
