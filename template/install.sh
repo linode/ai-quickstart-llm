@@ -1,5 +1,8 @@
 set -e
 
+# Project name (used for paths, service names, etc.)
+PROJECT_NAME="ai-quickstart-gpt-oss-20b"
+
 # Function to send ntfy notification
 notify() {
     local message="$1"
@@ -44,17 +47,17 @@ nvidia-ctk runtime configure --runtime=docker
 # Restart Docker to apply NVIDIA runtime configuration
 systemctl restart docker
 
-# Create systemd service for AI Quickstart LLM Stack
-notify "⚙️ Registering systemd service for AI Quickstart LLM Stack..."
-cat > /etc/systemd/system/ai-quickstart-llm.service << "EOF"
+# Create systemd service for AI Quickstart Stack
+notify "⚙️ Registering systemd service for ${PROJECT_NAME}..."
+cat > /etc/systemd/system/${PROJECT_NAME}.service << EOF
 [Unit]
-Description=Start AI Quickstart LLM Stack
+Description=Start ${PROJECT_NAME} Stack
 After=docker.service
 Requires=docker.service
 
 [Service]
 Type=oneshot
-WorkingDirectory=/opt/ai-quickstart-llm
+WorkingDirectory=/opt/${PROJECT_NAME}
 ExecStart=/usr/bin/docker compose --progress quiet up -d
 ExecStop=/usr/bin/docker compose down
 RemainAfterExit=yes
@@ -65,11 +68,11 @@ EOF
 
 # Enable service (will start containers on boot)
 systemctl daemon-reload
-systemctl enable ai-quickstart-llm.service
+systemctl enable ${PROJECT_NAME}.service
 
 # Pull latest Docker images
 notify "⬇️ Downloading latest vLLM & OpenWebUI container images... (this may take 2 - 3 min)..."
-cd /opt/ai-quickstart-llm
+cd /opt/${PROJECT_NAME}
 docker compose pull --quiet || true
 
 # Check if NVIDIA modules exist for current kernel
@@ -84,9 +87,9 @@ if [ -f "/lib/modules/${CURRENT_KERNEL}/kernel/nvidia-580-open/nvidia.ko" ] || \
 
     # Verify driver is loaded
     if nvidia-smi > /dev/null 2>&1; then
-        # Start AI Quickstart LLM Stack
-        cd /opt/ai-quickstart-llm
-        notify "🚀 Starting vLLM & OpenWebUI with docker comopose up ..."
+        # Start AI Quickstart Stack
+        cd /opt/${PROJECT_NAME}
+        notify "🚀 Starting vLLM & OpenWebUI with docker compose up ..."
         docker compose up -d
         exit 0
     fi

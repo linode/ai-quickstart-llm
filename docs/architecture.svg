@@ -80,7 +80,7 @@
   <!-- Systemd Service -->
   <rect x="470" y="460" width="300" height="85" class="systemd-box" rx="8"/>
   <text x="620" y="485" text-anchor="middle" class="subtitle">⚙️ systemd Service</text>
-  <text x="620" y="508" text-anchor="middle" class="small-label">ai-quickstart-llm.service</text>
+  <text x="620" y="508" text-anchor="middle" class="small-label">ai-quickstart-gpt-oss-20b.service</text>
   <text x="620" y="528" text-anchor="middle" class="small-label">Auto-start on boot • Lifecycle management</text>
 
   <!-- Docker Platform -->

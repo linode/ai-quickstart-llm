@@ -9,15 +9,18 @@ set -euo pipefail
 #
 # Usage:
 #   ./deploy.sh                    # Run locally (from cloned repo)
-#   bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh)
+#   bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh)
 #
 #==============================================================================
+
+# Project name (used for paths, service names, labels, etc.)
+readonly PROJECT_NAME="ai-quickstart-gpt-oss-20b"
 
 # Get directory of this script (empty if running via curl pipe)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}" 2>/dev/null)" 2>/dev/null && pwd 2>/dev/null || echo "")"
 
 # Remote repository base URL (for downloading files when running remotely)
-REPO_RAW_BASE="https://raw.githubusercontent.com/linode/ai-quickstart-llm/main"
+REPO_RAW_BASE="https://raw.githubusercontent.com/linode/${PROJECT_NAME}/main"
 
 # Temp directory for remote execution (will be cleaned up on exit)
 REMOTE_TEMP_DIR=""
@@ -39,7 +42,7 @@ _setup_required_files() {
     else
         # Download required files to temp directory
         echo "Downloading required files..."
-        REMOTE_TEMP_DIR="${TMPDIR:-/tmp}/ai-quickstart-llm-$$"
+        REMOTE_TEMP_DIR="${TMPDIR:-/tmp}/${PROJECT_NAME}-$$"
         mkdir -p "${REMOTE_TEMP_DIR}/template" "${REMOTE_TEMP_DIR}/script"
 
         for f in "${files[@]}"; do
@@ -134,7 +137,7 @@ _error_exit_with_cleanup() {
 show_banner
 
 print_msg "$CYAN" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-print_msg "$BOLD" "                    AI Quickstart LLM"
+print_msg "$BOLD" "                  AI Quickstart gpt-oss-20b LLM"
 print_msg "$CYAN" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
 print_msg "$YELLOW" "This script will:"
@@ -229,7 +232,7 @@ echo ""
 #==============================================================================
 show_step "🏷️  Step 5/10: Instance Label"
 
-DEFAULT_LABEL="ai-quickstart-llm-$(date +%y%m%d%H%M)"
+DEFAULT_LABEL="${PROJECT_NAME}-$(date +%y%m%d%H%M)"
 ask_input "Enter instance label" "$DEFAULT_LABEL" "validate_instance_label" "❌ Invalid label format" INSTANCE_LABEL
 
 echo "Instance label: $INSTANCE_LABEL"
@@ -301,6 +304,7 @@ fi
 
 # Create temporary cloud-init file with replacements
 CLOUD_INIT_DATA=$(cat "${TEMPLATE_DIR}/cloud-init.yaml" | \
+    sed "s|PROJECT_NAME_PLACEHOLDER|${PROJECT_NAME}|g" | \
     sed "s|INSTANCE_LABEL_PLACEHOLDER|${INSTANCE_LABEL}|g" | \
     sed "s|DOCKER_COMPOSE_BASE64_CONTENT_PLACEHOLDER|${DOCKER_COMPOSE_BASE64}|g" | \
     sed "s|INSTALL_SH_BASE64_CONTENT_PLACEHOLDER|${INSTALL_SH_BASE64}|g")
@@ -566,11 +570,11 @@ echo "   2. Create admin user account (your account data is stored only on your 
 echo "   3. Start chatting with the model running on your GPU instance !!"
 echo ""
 print_msg "$YELLOW" "📁 Check AI Stack Configuration:"
-printf "   Docker Compose: ${CYAN}/opt/ai-quickstart-llm/docker-compose.yml${NC}\n"
+printf "   Docker Compose: ${CYAN}/opt/${PROJECT_NAME}/docker-compose.yml${NC}\n"
 echo "   Services: vLLM (port 8000) + OpenWebUI (port 3000)"
 echo ""
 echo ""
-echo "🚀 Enjoy your AI Quickstart LLM on Akamai Cloud !!"
+echo "🚀 Enjoy your AI Quickstart gpt-oss-20b on Akamai Cloud !!"
 echo ""
 echo ""
 log_to_file "INFO" "Deployment completed successfully"

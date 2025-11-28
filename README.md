@@ -1,4 +1,4 @@
-# Akamai inference Cloud - AI Quickstart LLM
+# Akamai inference Cloud - AI Quickstart gpt-oss-20b LLM
 
 Automated deployment script for running a AI inference stack on Akamai Cloud (Linode) GPU instances. Get vLLM and Open-WebUI up and running in minutes with a single command.
 
@@ -8,7 +8,7 @@ Automated deployment script for running a AI inference stack on Akamai Cloud (Li
 Run this single command to deploy your AI stack:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh)
 ```
 
 That's it! The script will download required files and guide you through the interactive deployment process.
@@ -56,7 +56,7 @@ That's it! The script will download required files and guide you through the int
 No installation required - just run:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh)
 ```
 
 ### Option B: Download and Run
@@ -64,7 +64,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/mai
 Download the script and run locally:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh
+curl -fsSLO https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh
 bash deploy.sh
 ```
 
@@ -73,8 +73,8 @@ bash deploy.sh
 If you prefer to inspect or customize the scripts:
 
 ```bash
-git clone https://github.com/linode/ai-quickstart-llm
-cd ai-quickstart-llm
+git clone https://github.com/linode/ai-quickstart-gpt-oss-20b
+cd ai-quickstart-gpt-oss-20b
 ./deploy.sh
 ```
 
@@ -118,13 +118,13 @@ Once complete, you'll see:
 ### Configuration files in GPU Instance
 ```
    # Install script called by cloud-init service
-   /opt/ai-quickstart-llm/install.sh
+   /opt/ai-quickstart-gpt-oss-20b/install.sh
 
    # docker compose file calle by systemctl at startup
-   /opt/ai-quickstart-llm/docker-compose.yml
+   /opt/ai-quickstart-gpt-oss-20b/docker-compose.yml
 
    # service definition
-   /etc/systemd/system/ai-quickstart-llm.service
+   /etc/systemd/system/ai-quickstart-gpt-oss-20b.service
 ```
 
 -----------------------------------------
@@ -135,7 +135,7 @@ To delete a deployed instance:
 
 ```bash
 # Remote execution
-bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/delete.sh) <instance_id>
+bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/delete.sh) <instance_id>
 
 # Or if you cloned the repo
 ./delete.sh <instance_id>
@@ -148,7 +148,7 @@ The script will show instance details and ask for confirmation before deletion.
 ## 📁 Project Structure
 
 ```
-ai-quickstart-llm/
+ai-quickstart-gpt-oss-20b/
 ├── deploy.sh                    # Main deployment script
 ├── delete.sh                    # Instance deletion script
 ├── script/
@@ -186,19 +186,19 @@ ssh root@<instance-ip>
 docker ps -a
 
 # Check Docker containers log
-cd /opt/ai-quickstart-llm && docker compose logs -f
+cd /opt/ai-quickstart-gpt-oss-20b && docker compose logs -f
 
 # Check systemd service status
-systemctl status ai-quickstart-llm.service
+systemctl status ai-quickstart-gpt-oss-20b.service
 
 # View systemd service logs
-journalctl -u ai-quickstart-llm.service -n 100
+journalctl -u ai-quickstart-gpt-oss-20b.service -n 100
 
 # Check cloud-init logs
 tail -f /var/log/cloud-init-output.log -n 100
 
 # Restart all services
-systemctl restart ai-quickstart-llm.service
+systemctl restart ai-quickstart-gpt-oss-20b.service
 
 # Check NVIDIA GPU status
 nvidia-smi

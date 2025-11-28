@@ -7,15 +7,18 @@ set -euo pipefail
 #
 # Usage:
 #   ./delete.sh <instance_id>                    # Run locally (from cloned repo)
-#   bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/delete.sh) <instance_id>
+#   bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/delete.sh) <instance_id>
 #
 #==============================================================================
+
+# Project name (used for paths, service names, labels, etc.)
+readonly PROJECT_NAME="ai-quickstart-gpt-oss-20b"
 
 # Get directory of this script (empty if running via curl pipe)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}" 2>/dev/null)" 2>/dev/null && pwd 2>/dev/null || echo "")"
 
 # Remote repository base URL (for downloading files when running remotely)
-REPO_RAW_BASE="https://raw.githubusercontent.com/linode/ai-quickstart-llm/main"
+REPO_RAW_BASE="https://raw.githubusercontent.com/linode/${PROJECT_NAME}/main"
 
 # Temp directory for remote execution (will be cleaned up on exit)
 REMOTE_TEMP_DIR=""
@@ -36,7 +39,7 @@ _setup_required_files() {
     else
         # Download required files to temp directory
         echo "Downloading required files..."
-        REMOTE_TEMP_DIR="${TMPDIR:-/tmp}/ai-quickstart-llm-$$"
+        REMOTE_TEMP_DIR="${TMPDIR:-/tmp}/${PROJECT_NAME}-$$"
         mkdir -p "${REMOTE_TEMP_DIR}/script"
 
         for f in "${files[@]}"; do
