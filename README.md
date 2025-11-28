@@ -8,7 +8,7 @@ Automated deployment script for running a AI inference stack on Akamai Cloud (Li
 Run this single command to deploy your AI stack:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh | bash
 ```
 
 That's it! The script will download required files and guide you through the interactive deployment process.
@@ -72,7 +72,7 @@ That's it! The script will download required files and guide you through the int
 No installation required - just run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main/deploy.sh | bash
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh | bash
 ```
 
 ### Option B: Clone Repository

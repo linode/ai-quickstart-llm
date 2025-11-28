@@ -18,7 +18,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-}" 2>/dev/null)" 2>/dev/null && p
 
 # Remote repository base URL (for downloading files when running remotely)
 # TODO: Remove token parameters once repository is public
-REPO_RAW_BASE="https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main"
+REPO_RAW_BASE="https://raw.githubusercontent.com/linode/ai-quickstart-llm/main"
 
 # Temp directory for remote execution (will be cleaned up on exit)
 REMOTE_TEMP_DIR=""
