@@ -169,6 +169,32 @@ check_command() {
     return 1
 }
 
+# Ensure jq is available (auto-install if missing)
+ensure_jq() {
+    check_command jq && jq --version &>/dev/null && return 0
+    echo "jq not found. Attempting to install..." >&2
+    local jq_base="https://github.com/jqlang/jq/releases/download/jq-1.8.1"
+
+    # Windows Git Bash
+    if [[ "$OSTYPE" == "msys" || -n "${MSYSTEM:-}" ]]; then
+        curl -fsSL -o "/usr/bin/jq.exe" "$jq_base/jq-windows-amd64.exe" 2>/dev/null && chmod +x /usr/bin/jq.exe && jq --version &>/dev/null && return 0
+        echo "Failed. Run: curl -L -o /usr/bin/jq.exe $jq_base/jq-windows-amd64.exe" >&2 && return 1
+    fi
+    # macOS - try brew first, then download binary
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        command -v brew &>/dev/null && brew install -q jq &>/dev/null && jq --version &>/dev/null && return 0
+        local arch="amd64" && [[ "$(uname -m)" == "arm64" ]] && arch="arm64"
+        curl -fsSL -o "/usr/local/bin/jq" "$jq_base/jq-macos-$arch" 2>/dev/null && chmod +x /usr/local/bin/jq && jq --version &>/dev/null && return 0
+        echo "Failed. Run: sudo curl -L -o /usr/local/bin/jq $jq_base/jq-macos-$arch && sudo chmod +x /usr/local/bin/jq" >&2 && return 1
+    fi
+    # Linux - apt/dnf/yum
+    command -v apt &>/dev/null && sudo apt-get install -y -qq jq &>/dev/null && jq --version &>/dev/null && return 0
+    command -v dnf &>/dev/null && sudo dnf install -y -q jq &>/dev/null && jq --version &>/dev/null && return 0
+    command -v yum &>/dev/null && sudo yum install -y -q jq &>/dev/null && jq --version &>/dev/null && return 0
+
+    echo "Could not auto install jq. Please install manually." >&2 && return 1
+}
+
 #==============================================================================
 # SECTION 5: Interactive Selection (Public)
 #==============================================================================

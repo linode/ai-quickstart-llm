@@ -9,7 +9,7 @@ set -euo pipefail
 #
 # Usage:
 #   ./deploy.sh                    # Run locally (from cloned repo)
-#   curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main/deploy.sh | bash
+#   bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/main/deploy.sh)
 #
 #==============================================================================
 
@@ -150,6 +150,9 @@ echo ""
 print_msg "$GREEN" "Setup time: ~10-15 minutes"
 print_msg "$CYAN" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo ""
+
+# before proceeding, ensure jq is installed
+ensure_jq || error_exit "jq is required but could not be installed automatically. Please install jq and re-run the script."
 
 sleep 5
 
