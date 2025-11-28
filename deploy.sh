@@ -105,7 +105,7 @@ _error_exit_with_cleanup() {
     if [ "$offer_delete" = "true" ] && [ -n "${INSTANCE_ID:-}" ]; then
         echo ""
         printf '\n\n\n\033[3A'        # Print 3 blank lines to scroll up
-        read -p "$(echo -e ${YELLOW}Do you want to delete the failed instance? [Y/n]:${NC} )" delete_choice
+        read -p "$(echo -e ${YELLOW}Do you want to delete the failed instance? [Y/n]:${NC} )" delete_choice </dev/tty
         delete_choice=${delete_choice:-Y}
 
         if [[ "$delete_choice" =~ ^[Yy]$ ]]; then
@@ -318,7 +318,7 @@ echo ""
 
 # Ask for confirmation
 scroll_up
-read -p "$(echo -e ${YELLOW}Proceed with instance creation? [Y/n]:${NC} )" confirm
+read -p "$(echo -e ${YELLOW}Proceed with instance creation? [Y/n]:${NC} )" confirm </dev/tty
 confirm=${confirm:-Y}
 
 if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
