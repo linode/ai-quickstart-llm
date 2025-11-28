@@ -235,5 +235,5 @@ Issues and pull requests are welcome! For major changes, please open an issue fi
 
 ## 📄 License
 
-This project is licensed under the Appatch .
+This project is licensed under the Apache License 2.0.
 
