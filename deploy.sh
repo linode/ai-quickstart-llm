@@ -9,7 +9,7 @@ set -euo pipefail
 #
 # Usage:
 #   ./deploy.sh                    # Run locally (from cloned repo)
-#   curl -fsSL <url> | bash        # Run remotely (downloads required files)
+#   curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-llm/refs/heads/main/deploy.sh | bash
 #
 #==============================================================================
 
