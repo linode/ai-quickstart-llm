@@ -178,80 +178,39 @@ ai-quickstart-llm/
 -----------------------------------------
 ## 🛠️ Useful Commands
 
-### Check Service Status
 ```bash
 # SSH into your instance
 ssh root@<instance-ip>
 
 # Check container status
-docker ps
+docker ps -a
 
 # Check Docker containers log
-cd /opt/ai-quickstart-llm && docker compose logs
+cd /opt/ai-quickstart-llm && docker compose logs -f
 
-# Check systemd service
-journalctl -u ai-quickstart-llm.service -n 10000 | awk '!seen[$0]++'
+# Check systemd service status
+systemctl status ai-quickstart-llm.service
+
+# View systemd service logs
+journalctl -u ai-quickstart-llm.service -n 100
 
 # Check cloud-init logs
-tail -f /var/log/cloud-init-output.log -n 1000
+tail -f /var/log/cloud-init-output.log -n 100
 
-```
-
-### Restart Services
-```bash
 # Restart all services
 systemctl restart ai-quickstart-llm.service
 
-# Or using Docker Compose
-cd /opt/ai-quickstart-llm
-docker compose restart
-```
+# Check NVIDIA GPU status
+nvidia-smi
 
-### Check vLLM Model Status
-```bash
-# Check loaded models
+# Check vLLM loaded models
 curl http://localhost:8000/v1/models
-```
 
-### Check Open-WebUI Health
-```bash
-# Health check endpoint
+# Check Open-WebUI health
 curl http://localhost:3000/health
-```
 
-## 🐛 Troubleshooting
-
-### Deployment Fails
-The script offers to delete failed instances automatically when errors occur at:
-- Instance fails to reach 'running' status
-- Timeout waiting for cloud-init (5 minutes)
-- Instance fails to become accessible
-
-### Services Not Starting
-```bash
-# Check NVIDIA drivers
-nvidia-smi
-
-# Check Docker
-docker ps -a
-
-# Check systemd service
-systemctl status ai-quickstart-llm.service
-
-# View detailed logs
-journalctl -u ai-quickstart-llm.service -xe
-```
-
-### vLLM Model Not Loading
-```bash
-# Check vLLM logs
+# Check vLLM container logs
 docker logs vllm
-
-# Check GPU availability
-nvidia-smi
-
-# Restart vLLM
-docker compose restart vllm
 ```
 
 ## 🤝 Contributing
