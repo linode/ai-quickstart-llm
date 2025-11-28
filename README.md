@@ -51,7 +51,7 @@ That's it! The script will download required files and guide you through the int
 -----------------------------------------
 ## 🚦 Getting Started
 
-### Option A: Single Command Execution
+### 1. Option A: Single Command Execution
 
 No installation required - just run:
 
@@ -59,7 +59,7 @@ No installation required - just run:
 bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh)
 ```
 
-### Option B: Download and Run
+### 1. Option B: Download and Run
 
 Download the script and run locally:
 
@@ -68,7 +68,7 @@ curl -fsSLO https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/m
 bash deploy.sh
 ```
 
-### Option C: Clone Repository
+### 1. Option C: Clone Repository
 
 If you prefer to inspect or customize the scripts:
 
@@ -85,7 +85,7 @@ cd ai-quickstart-gpt-oss-20b
 > ```
 >
 
-### Follow Interactive Prompts
+### 2. Follow Interactive Prompts
 The script will ask you to:
 - Choose a region (e.g., us-east, eu-west)
 - Select GPU instance type
@@ -111,8 +111,7 @@ Once complete, you'll see:
    Open-WebUI:  http://<instance-ip>:3000
 
 🔐 Access Credentials:
-   SSH:         ssh root@<instance-ip>
-   SSH Key:     /path/to/your/key
+   SSH:   ssh -i /path/to/your/key root@<instance-ip>
 ```
 
 ### Configuration files in GPU Instance
@@ -180,7 +179,7 @@ ai-quickstart-gpt-oss-20b/
 
 ```bash
 # SSH into your instance
-ssh root@<instance-ip>
+ssh -i /path/to/your/key root@<instance-ip>
 
 # Check container status
 docker ps -a
