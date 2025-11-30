@@ -1,6 +1,6 @@
 # Akamai inference Cloud - AI Quickstart gpt-oss-20b LLM
 
-Automated deployment script to run your own private, self-hosted LLM inference server on Akamai Cloud GPU instances. Pre-configured with OpenAI's gpt-oss-20b (20B parameter open-source model) optimized for instruction following. Get vLLM and Open-WebUI up and running in minutes with a single command.
+Automated deployment script to run your private, self-hosted LLM inference server on Akamai Cloud GPU instances. Pre-configured with OpenAI's gpt-oss-20b (20B parameter open-source model) optimized for instruction following. Get vLLM and Open-WebUI up and running in minutes with a single command.
 
 -----------------------------------------
 ## 🚀 Quick Start

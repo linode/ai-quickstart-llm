@@ -458,7 +458,7 @@ SSH_OPTS=(-o ConnectTimeout=3 -o BatchMode=yes -o StrictHostKeyChecking=no -o Us
 while true; do
     ELAPSED=$(($(date +%s) - START_TIME))
     ELAPSED_STR=$([ $ELAPSED -ge 60 ] && echo "$((ELAPSED / 60))m $((ELAPSED % 60))s" || echo "${ELAPSED}s")
-    progress "$YELLOW" "Status:booting ... Elapsed: ${ELAPSED_STR}"
+    progress "$YELLOW" "Status: booting ... Elapsed: ${ELAPSED_STR}"
 
     [ $ELAPSED -ge 120 ] && _error_exit_with_cleanup "Instance failed to become accessible" true
     ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" exit </dev/null 2>/dev/null && break
@@ -493,7 +493,7 @@ START_TIME=$(date +%s)
 while true; do
     ELAPSED=$(($(date +%s) - START_TIME))
     ELAPSED_STR=$([ $ELAPSED -ge 60 ] && echo "$((ELAPSED / 60))m $((ELAPSED % 60))s" || echo "${ELAPSED}s")
-    progress "$YELLOW" "Status:starting ... Elapsed: ${ELAPSED_STR}"
+    progress "$YELLOW" "Status: starting ... Elapsed: ${ELAPSED_STR}"
 
     if [ "$(ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/health" </dev/null 2>/dev/null || echo "000")" = "200" ]; then
         log_to_file "INFO" "Open-WebUI health check passed in ${ELAPSED}s"
@@ -517,7 +517,7 @@ START_TIME=$(date +%s)
 while true; do
     ELAPSED=$(($(date +%s) - START_TIME))
     ELAPSED_STR=$([ $ELAPSED -ge 60 ] && echo "$((ELAPSED / 60))m $((ELAPSED % 60))s" || echo "${ELAPSED}s")
-    progress "$YELLOW" "Status:downloading model ... Elapsed: ${ELAPSED_STR}"
+    progress "$YELLOW" "Status: downloading model ... Elapsed: ${ELAPSED_STR}"
 
     if ssh "${SSH_OPTS[@]}" "root@${INSTANCE_IP}" "curl -s http://localhost:8000/v1/models" </dev/null 2>/dev/null | grep -q '"id":"openai/gpt-oss-20b"'; then
         log_to_file "INFO" "vLLM model loaded successfully in ${ELAPSED_STR}"
