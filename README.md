@@ -8,7 +8,7 @@ Automated deployment script to run your private, self-hosted LLM inference serve
 Just run this single command:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh)
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh | bash
 ```
 
 That's it! The script will download required files and guide you through the interactive deployment process.
@@ -56,7 +56,7 @@ That's it! The script will download required files and guide you through the int
 No installation required - just run:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh)
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/deploy.sh | bash
 ```
 
 ### 1. Option B: Download and Run
@@ -134,10 +134,11 @@ To delete a deployed instance:
 
 ```bash
 # Remote execution
-bash <(curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/delete.sh) <instance_id>
+curl -fsSL https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/delete.sh | bash -s -- <instance_id>
 
-# Or if you cloned the repo
-./delete.sh <instance_id>
+# Or download script and run
+curl -fsSLO https://raw.githubusercontent.com/linode/ai-quickstart-gpt-oss-20b/main/delete.sh
+bash delete.sh <instance_id>
 ```
 
 The script will show instance details and ask for confirmation before deletion.
