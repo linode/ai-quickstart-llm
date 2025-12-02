@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+export LC_NUMERIC=C
 
 #==============================================================================
 # quickstart_tools.sh - Shared utilities for AI Quickstart projects
