@@ -161,12 +161,10 @@ sleep 5
 #==============================================================================
 # Get Token from linode-cli or Linode OAuth
 #==============================================================================
-show_step "🔑 Step 1/10: Obtaining Linode API credentials..."
+show_step "🔑 Step 1/10: Obtaining Linode API token..."
 
 # Get token using quickstart_tools (env → linode-cli → OAuth)
 TOKEN=$(get_linode_token) || error_exit "Failed to get API token. Please configure linode-cli or set LINODE_TOKEN"
-
-success "API credentials obtained successfully"
 echo ""
 
 #==============================================================================
@@ -176,7 +174,7 @@ show_step "📊 Step 2/10: Fetching GPU availability..."
 
 GPU_DATA=$(get_gpu_availability "$TOKEN") || error_exit "Failed to fetch GPU availability data"
 
-info "GPU availability data fetched successfully"
+success "GPU availability data fetched successfully"
 echo ""
 
 #==============================================================================
@@ -194,7 +192,7 @@ fi
 print_msg "$GREEN" "Available Regions:"
 
 # Use ask_selection for region choice
-ask_selection "Enter region number" REGION_LIST "" region_choice
+ask_selection "Select a region" REGION_LIST "" region_choice
 
 # Get full region info from the data array using the selection index
 IFS='|' read -r SELECTED_REGION region_label available_instance_types <<< "${REGION_DATA[$((region_choice-1))]}"
@@ -218,7 +216,7 @@ if [ ${#TYPE_DISPLAY[@]} -eq 0 ]; then
 fi
 
 # Use ask_selection for instance type choice
-ask_selection "Enter instance type number" TYPE_DISPLAY "$default_type_index" type_choice "\n     ${MAGENTA}⭐ RECOMMENDED${NC}"
+ask_selection "Select an instance type" TYPE_DISPLAY "$default_type_index" type_choice "\n     ${YELLOW}⭐ RECOMMENDED${NC}"
 
 # Extract the actual type ID from the selected option
 SELECTED_TYPE=$(echo "${TYPE_DATA[$((type_choice-1))]}" | jq -r '.id')
@@ -232,8 +230,13 @@ echo ""
 #==============================================================================
 show_step "🏷️  Step 5/10: Instance Label"
 
-DEFAULT_LABEL="${PROJECT_NAME}-$(date +%y%m%d%H%M)"
-ask_input "Enter instance label" "$DEFAULT_LABEL" "validate_instance_label" "❌ Invalid label format" INSTANCE_LABEL
+INSTANCE_LABEL="${PROJECT_NAME}-$(date +%y%m%d%H%M)"
+print_msg "$GREEN" "Your Instance Label: $INSTANCE_LABEL"
+echo ""
+
+scroll_up
+read -p "$(echo -e ${YELLOW}Use this instance label? [Y/n]:${NC} )" confirm </dev/tty
+[[ "${confirm:-Y}" =~ ^[Yy]$ ]] || ask_input "Enter instance label" "$INSTANCE_LABEL" "validate_instance_label" "❌ Invalid label format" INSTANCE_LABEL
 
 echo "Instance label: $INSTANCE_LABEL"
 log_to_file "INFO" "User set instance label: $INSTANCE_LABEL"
@@ -243,8 +246,9 @@ echo ""
 # Let User Specify Root Password
 #==============================================================================
 show_step "🔐 Step 6/10: Root Password"
+print_msg "$GREEN" "A root password is required for secure access to the instance"
+echo ""
 
-info "Password requirements: min 11 chars, must include uppercase, lowercase, numbers, and special characters"
 ask_password INSTANCE_PASSWORD
 echo ""
 
@@ -252,23 +256,30 @@ echo ""
 # Let User Select SSH Public Key
 #==============================================================================
 show_step "🔑 Step 7/10: SSH Public Key (Required)"
-
-info "An SSH key is required for secure access to the instance"
+print_msg "$GREEN" "An SSH key is required for secure access to the instance"
+echo ""
 
 # Get SSH keys using quickstart_tools
-print_msg "$GREEN" "SSH Key Options:"
 get_ssh_keys SSH_KEY_DISPLAY SSH_KEY_PATHS
 
-# Use ask_selection for SSH key choice
-ask_selection "Enter SSH key option" SSH_KEY_DISPLAY "" key_choice
+# Check if there are existing SSH keys
+auto_generate_ssh=false
+if [ ${#SSH_KEY_PATHS[@]} -eq 0 ]; then
+    info "No existing SSH keys found in ~/.ssh/"
+    scroll_up
+    read -p "$(echo -e ${YELLOW}Generate a new SSH key pair? [Y/n]:${NC} )" confirm </dev/tty
+    [[ "${confirm:-Y}" =~ ^[Yy]$ ]] || error_exit "SSH key is required. Please add an SSH key to ~/.ssh/ and try again."
+    auto_generate_ssh=true
+else
+    ask_selection "Select an SSH key" SSH_KEY_DISPLAY "" key_choice
+    [ "$key_choice" -gt ${#SSH_KEY_PATHS[@]} ] && auto_generate_ssh=true
+fi
 
-# Handle selection
-if [ "$key_choice" -gt ${#SSH_KEY_PATHS[@]} ]; then
-    # Auto-generate new key and add to paths array
+if [ "$auto_generate_ssh" = true ]; then
     AUTO_KEY_PATH="$HOME/.ssh/${INSTANCE_LABEL}"
-    info "Generating new SSH key pair: $(basename "$AUTO_KEY_PATH")"
     SSH_PUBLIC_KEY=$(generate_ssh_key "$AUTO_KEY_PATH" "$(basename "$AUTO_KEY_PATH")") || error_exit "Failed to generate SSH key"
     SSH_KEY_PATHS+=("${AUTO_KEY_PATH}.pub")
+    key_choice=${#SSH_KEY_PATHS[@]}
     log_to_file "INFO" "Auto-generated SSH key: ${AUTO_KEY_PATH}"
     success "Generated new SSH key: ${AUTO_KEY_PATH}"
     warn "IMPORTANT: Save the private key securely!"

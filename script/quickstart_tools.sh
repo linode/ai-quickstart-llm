@@ -246,22 +246,16 @@ ask_selection() {
 
     echo "" >&2
 
-    # Add bottom spacing if requested
-    if [ "$bottom_spacing" -gt 0 ]; then
-        local j
-        for j in $(seq 1 "$bottom_spacing"); do
-            printf '\n' >&2
-        done
-        printf '\033[%dA' "$bottom_spacing" >&2
-    fi
+    scroll_up "$bottom_spacing"
 
-    # Prompt for selection
+    # Prompt for selection (with range indicator)
     local selection
+    local range_text="(1-${array_length})"
     while true; do
         if [ -n "$default_index" ]; then
-            read -r -p "$(echo -e "${YELLOW}${prompt_text} [default: ${default_index}]:${NC}")" selection </dev/tty
+            read -r -p "$(echo -e "${YELLOW}${prompt_text} ${range_text} [default: ${default_index}]:${NC} ")" selection </dev/tty
         else
-            read -r -p "$(echo -e "${YELLOW}${prompt_text}:${NC}")" selection </dev/tty
+            read -r -p "$(echo -e "${YELLOW}${prompt_text} ${range_text}:${NC} ")" selection </dev/tty
         fi
 
         # Use default if empty input and default is set
@@ -269,15 +263,9 @@ ask_selection() {
             selection="$default_index"
         fi
 
-        # Validate input is a number
-        if ! [[ "$selection" =~ ^[0-9]+$ ]]; then
-            echo -e "${RED}Invalid input. Please enter a number between 1 and ${array_length}.${NC}" >&2
-            continue
-        fi
-
-        # Validate input is in range
-        if [ "$selection" -lt 1 ] || [ "$selection" -gt "$array_length" ]; then
-            echo -e "${RED}Invalid selection. Please enter a number between 1 and ${array_length}.${NC}" >&2
+        # Validate input is a number in range
+        if ! [[ "$selection" =~ ^[0-9]+$ ]] || [ "$selection" -lt 1 ] || [ "$selection" -gt "$array_length" ]; then
+            echo -e "${RED}Please enter a number between 1 and ${array_length}.${NC}" >&2
             continue
         fi
 
@@ -309,14 +297,7 @@ ask_input() {
     local result_var="$5"
     local bottom_spacing="${6:-5}"
 
-    # Add bottom spacing if requested
-    if [ "$bottom_spacing" -gt 0 ]; then
-        local j
-        for j in $(seq 1 "$bottom_spacing"); do
-            printf '\n' >&2
-        done
-        printf '\033[%dA' "$bottom_spacing" >&2
-    fi
+    scroll_up "$bottom_spacing"
 
     local user_input
     while true; do
@@ -361,36 +342,40 @@ ask_password() {
     local result_var="$1"
     local bottom_spacing="${2:-5}"
 
-    # Add bottom spacing if requested
-    if [ "$bottom_spacing" -gt 0 ]; then
-        local j
-        for j in $(seq 1 "$bottom_spacing"); do
-            printf '\n' >&2
-        done
-        printf '\033[%dA' "$bottom_spacing" >&2
+    scroll_up "$bottom_spacing"
+
+    # Ask if user wants to auto-generate
+    local auto_generate
+    read -r -p "$(echo -e ${YELLOW}Auto-generate a secure root password? [Y/n]:${NC} )" auto_generate </dev/tty
+
+    if [[ "${auto_generate:-Y}" =~ ^[Yy]$ ]]; then
+        local generated_password
+        generated_password=$(generate_root_password)
+        [ -z "$generated_password" ] || [ ${#generated_password} -lt 10 ] && error_exit "Failed to generate password"
+        log_to_file "INFO" "Password auto-generated: $generated_password"
+        eval "${result_var}='${generated_password}'"
+        success "Password auto-generated"
+        return 0
     fi
 
+    # Manual password entry
     local user_password
     while true; do
-        read -s -r -p "$(echo -e ${YELLOW}Enter root password ${NC}[empty to auto-generate]: )" user_password </dev/tty
+        read -s -r -p "$(echo -e ${YELLOW}Enter root password:${NC} )" user_password </dev/tty
         echo ""
 
-        if [ -z "$user_password" ]; then
-            local generated_password
-            generated_password=$(generate_root_password)
-            [ -z "$generated_password" ] || [ ${#generated_password} -lt 10 ] && error_exit "Failed to generate password"
-            log_to_file "INFO" "Password auto-generated: $generated_password"
-            eval "${result_var}='${generated_password}'"
-            echo "Password Auto-generated." && break
+        if ! validate_root_password "$user_password"; then
+            info "Password requirements: min 11 chars, must include uppercase, lowercase, numbers, and special characters"
+            continue
         fi
 
-        validate_root_password "$user_password" || { warn "Password does not meet requirements. Please try again."; continue; }
         read -s -r -p "$(echo -e ${YELLOW}Confirm password:${NC} )" user_password_confirm </dev/tty
         echo ""
+
         if [ "$user_password" = "$user_password_confirm" ]; then
             eval "${result_var}='${user_password}'"
             log_to_file "INFO" "User typed password: *************"
-            echo "Password accepted"
+            success "Password accepted"
             break
         fi
         warn "Passwords do not match. Please try again."
