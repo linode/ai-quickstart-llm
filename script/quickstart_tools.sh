@@ -372,7 +372,7 @@ ask_password() {
 
     local user_password
     while true; do
-        read -s -p "$(echo -e ${YELLOW}Enter root password ${NC}[empty to auto-generate]: )" user_password
+        read -s -r -p "$(echo -e ${YELLOW}Enter root password ${NC}[empty to auto-generate]: )" user_password </dev/tty
         echo ""
 
         if [ -z "$user_password" ]; then
@@ -385,7 +385,7 @@ ask_password() {
         fi
 
         validate_root_password "$user_password" || { warn "Password does not meet requirements. Please try again."; continue; }
-        read -s -p "$(echo -e ${YELLOW}Confirm password:${NC} )" user_password_confirm
+        read -s -r -p "$(echo -e ${YELLOW}Confirm password:${NC} )" user_password_confirm </dev/tty
         echo ""
         if [ "$user_password" = "$user_password_confirm" ]; then
             eval "${result_var}='${user_password}'"
@@ -1493,14 +1493,16 @@ get_ssh_keys() {
     done < <(find "$HOME/.ssh" -maxdepth 1 -name "*.pub" -type f 2>/dev/null | sort)
 
     # Build display and path arrays
-    for key_path in "${key_files[@]}"; do
-        local key_basename key_preview formatted_option
-        key_basename="$(basename "$key_path")"
-        key_preview="$(head -c 60 "$key_path" 2>/dev/null || true)"
-        printf -v formatted_option "%-30s %s..." "$key_basename" "$key_preview"
-        eval "$display_array_name+=(\"\$formatted_option\")"
-        eval "$path_array_name+=(\"\$key_path\")"
-    done
+    if [ ${#key_files[@]} -gt 0 ]; then
+        for key_path in "${key_files[@]}"; do
+            local key_basename key_preview formatted_option
+            key_basename="$(basename "$key_path")"
+            key_preview="$(head -c 60 "$key_path" 2>/dev/null || true)"
+            printf -v formatted_option "%-30s %s..." "$key_basename" "$key_preview"
+            eval "$display_array_name+=(\"\$formatted_option\")"
+            eval "$path_array_name+=(\"\$key_path\")"
+        done
+    fi
 
     # Add auto-generate option if requested
     if [ "$include_auto_generate" = "true" ]; then
