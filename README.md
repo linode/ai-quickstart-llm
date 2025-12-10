@@ -2,6 +2,18 @@
 
 Automated deployment script to run your private, self-hosted LLM inference server on Akamai Cloud GPU instances. Pre-configured with OpenAI's gpt-oss-20b (20B parameter open-source model) optimized for instruction following. Get vLLM and Open-WebUI up and running in minutes with a single command.
 
+## About gpt-oss-20b
+
+**gpt-oss-20b** is OpenAI's open-source 20B parameter model that delivers exceptional performance-per-parameter efficiency. Despite its compact size, it achieves an Intelligence Index score of 52 (high reasoning) on the [Artificial Analysis benchmark](https://artificialanalysis.ai/), ranking alongside much larger models like MiniMax-M2 and outperforming many 70B+ parameter alternatives.
+
+<img src="docs/openmodel-ai-intelligence-index-2025-12-10.png" alt="Artificial Analysis Intelligence Index" width="800"/>
+
+**Key advantages:**
+- **Memory efficient**: 20B parameters fit comfortably on a single RTX 4000 Ada GPU with room for context
+- **High-throughput inference**: Optimized architecture enables fast token generation, ideal for real-time applications
+- **Cost-effective**: Smaller model size means lower GPU requirements and reduced operational costs
+- **Production-ready**: Instruction-tuned for reliable, high-quality responses out of the box
+
 -----------------------------------------
 ## 🚀 Quick Start
 
