@@ -14,6 +14,16 @@ Automated deployment script to run your private, self-hosted LLM inference serve
 - **Cost-effective**: Smaller model size means lower GPU requirements and reduced operational costs
 - **Production-ready**: Instruction-tuned for reliable, high-quality responses out of the box
 
+## 📚 Looking for different models?
+
+Check out these other quickstart repositories:
+
+| Model | Parameters | Description | Repository |
+|:------|:-----------|:------------|:-----------|
+| **GPT-OSS-20B** | 20B | Large-scale open-source GPT model | [ai-quickstart-gpt-oss-20b](https://github.com/linode/ai-quickstart-gpt-oss-20b) |
+| **Qwen3-14B-FP8** | 14B | Qwen3 with FP8 quantization (this repo) | [ai-quickstart-qwen3-14b-fp8](https://github.com/linode/ai-quickstart-qwen3-14b-fp8) |
+| **NVIDIA Nemotron Nano 9B v2** | 9B | NVIDIA's efficient Nemotron model | [ai-quickstart-nvidia-nemotron-nano-9b-v2](https://github.com/linode/ai-quickstart-nvidia-nemotron-nano-9b-v2) |
+
 -----------------------------------------
 ## 🚀 Quick Start
 
